@@ -98,7 +98,7 @@ stdenv.mkDerivation (rec {
     url = "http://tarballs.nixos.org/sha256/${sha256}";
     name = "D5123.diff";
     sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
-  })];
+  })] ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.6.4-darwin.patch;
 
   postPatch = "patchShebangs .";
 

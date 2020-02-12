@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl ];
-  nativeBuildInputs = [ makeWrapper autoreconfHook ];
+  nativeBuildInputs = [ makeWrapper ];
 
   hardeningDisable = [ "format" ];
 

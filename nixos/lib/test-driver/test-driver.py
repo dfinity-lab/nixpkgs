@@ -932,7 +932,7 @@ def main() -> None:
 
     log = Logger()
 
-    vlan_nrs = list(dict.fromkeys(os.environ["VLANS"].split()))
+    vlan_nrs = list(dict.fromkeys(os.environ.get("VLANS", "").split()))
     vde_sockets = [create_vlan(v) for v in vlan_nrs]
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket

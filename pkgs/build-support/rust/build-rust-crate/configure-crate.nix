@@ -120,7 +120,7 @@ in ''
        -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
 
      mkdir -p target/build/${crateName}.out
-     export RUST_BACKTRACE=1
+     export RUST_BACKTRACE=full
      BUILD_OUT_DIR="-L $OUT_DIR"
      mkdir -p $OUT_DIR
      target/build/${crateName}/build_script_build > target/build/${crateName}.opt

@@ -4,6 +4,7 @@ from queue import Queue, Empty
 from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
 from xml.sax.saxutils import XMLGenerator
 import _thread
+import argparse
 import atexit
 import base64
 import os
@@ -746,6 +747,11 @@ class Machine:
 
         self.log("QEMU running (pid {})".format(self.pid))
 
+    def cleanup_statedir(self) -> None:
+        self.log("delete the VM state directory")
+        if os.path.isfile(self.state_dir):
+            shutil.rmtree(self.state_dir)
+
     def shutdown(self) -> None:
         if not self.booted:
             return
@@ -884,6 +890,15 @@ def subtest(name: str) -> Iterator[None]:
 
 
 if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
+        "-K",
+        "--keep-vm-state",
+        help="re-use a VM state coming from a previous run",
+        action="store_true",
+    )
+    (cli_args, vm_scripts) = arg_parser.parse_known_args()
+
     log = Logger()
 
     vlan_nrs = list(dict.fromkeys(os.environ["VLANS"].split()))
@@ -891,8 +906,10 @@ if __name__ == "__main__":
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
 
-    vm_scripts = sys.argv[1:]
     machines = [create_machine({"startCommand": s}) for s in vm_scripts]
+    for machine in machines:
+        if not cli_args.keep_vm_state:
+            machine.cleanup_statedir()
     machine_eval = [
         "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
     ]
@@ -906,7 +923,6 @@ if __name__ == "__main__":
                     continue
                 log.log("killing {} (pid {})".format(machine.name, machine.pid))
                 machine.process.kill()
-
             for _, _, process, _ in vde_sockets:
                 process.kill()
         log.close()

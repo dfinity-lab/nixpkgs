@@ -5737,7 +5737,8 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_0_11;
+  nomad = nomad_0_12;
+
   # Nomad never updates major go versions within a release series and is unsupported
   # on Go versions that it did not ship with. Due to historic bugs when compiled
   # with different versions we pin Go for all versions.
@@ -9692,9 +9693,10 @@ in
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  rust-cbindgen_0_15 = callPackage ../development/tools/rust/cbindgen/0_15.nix {
+  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/0_17.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
 
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;

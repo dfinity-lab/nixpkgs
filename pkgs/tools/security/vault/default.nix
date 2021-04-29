@@ -8,7 +8,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1g6fz6dl90cb5pnvvmkndqgncfjy50j9jw3xzn8s91yzvvld8ds7";
+    sha256 = "08ap1nk1pqsnsrqmc53nwzm9b3v5cmgrgck9fwim2zh68ag5kgqj";
   };
 
   goPackagePath = "github.com/hashicorp/vault";
